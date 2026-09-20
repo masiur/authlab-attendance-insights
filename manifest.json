@@ -1,0 +1,18 @@
+{
+  "manifest_version": 3,
+  "name": "AuthLab Attendance Insights",
+  "version": "1.1.0",
+  "description": "Graphs and details for your attendance and leaves on lounge.authlab.io/office.",
+  "content_scripts": [
+    {
+      "matches": [
+        "https://lounge.authlab.io/office*"
+      ],
+      "js": [
+        "content.js"
+      ],
+      "run_at": "document_idle",
+      "world": "MAIN"
+    }
+  ]
+}

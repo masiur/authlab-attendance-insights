@@ -313,6 +313,7 @@
     th { position: sticky; top: 0; background: var(--bg); color: var(--mut); font-weight: 600; }
     td.note { white-space: normal; color: var(--mut); min-width: 200px; } em { color: var(--leave); font-style: normal; }
     .st { font-weight: 600; } .st.approved { color: #2e9e5b; } .st.declined, .st.cancelled { color: var(--ref); } .st.applied, .st.processing { color: var(--leave); }
+    footer { margin-top: 16px; text-align: center; color: var(--mut); font-size: 11px; opacity: .7; }
     .empty { color: var(--mut); padding: 24px; text-align: center; }
   `;
   // Flat, unscrolled layout — shared by the exported HTML file and the print (PDF) view.
@@ -325,6 +326,8 @@
     .card:has(svg), .tile, tr { break-inside: avoid; }
     * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   `;
+
+  const FOOTER = '<footer>Attendance Insights · made with care by Masiur Rahman Siddiki</footer>';
 
   // ---------- shell ----------
   const host = document.createElement('div');
@@ -359,11 +362,11 @@
     wrap.classList.toggle('dark', document.documentElement.classList.contains('dark'));
     root.querySelectorAll('[data-tab]').forEach((b) => b.classList.toggle('on', b.dataset.tab === state.tab));
     statusEl.textContent = state.status;
-    if (state.data) body.innerHTML = state.tab === 'attendance' ? attendanceView() : leavesView();
+    if (state.data) body.innerHTML = (state.tab === 'attendance' ? attendanceView() : leavesView()) + FOOTER;
   }
 
   // Report = both tabs, for the period / year currently selected.
-  const reportHtml = () => `<p class="meta">${esc((vars.auth && vars.auth.display_name) || '')} · generated ${esc(new Date().toLocaleString())}</p><h2>Attendance</h2>${attendanceView()}<h2>Leaves</h2>${leavesView()}`;
+  const reportHtml = () => `<p class="meta">${esc((vars.auth && vars.auth.display_name) || '')} · generated ${esc(new Date().toLocaleString())}</p><h2>Attendance</h2>${attendanceView()}<h2>Leaves</h2>${leavesView()}${FOOTER}`;
   const reportName = () => `attendance-${state.period}`;
 
   function exportHtml() {

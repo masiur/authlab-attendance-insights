@@ -1,6 +1,6 @@
 # AuthLab Attendance Insights
 
-Chrome extension that adds an **📊 Insights** panel to `lounge.authlab.io/office` — graphs and details for your own attendance and leaves, built from data the page's API already returns but doesn't display.
+Chrome / Firefox extension that adds an **📊 Insights** panel to `lounge.authlab.io/office` — graphs and details for your own attendance and leaves, built from data the page's API already returns but doesn't display.
 
 ## Features
 
@@ -18,6 +18,12 @@ Chrome extension that adds an **📊 Insights** panel to `lounge.authlab.io/offi
 4. Open `https://lounge.authlab.io/office` and click **📊 Insights** (bottom-right)
 
 Requires Chrome 111+.
+
+### Firefox (128+)
+
+Temporary (removed when Firefox closes): open `about:debugging#/runtime/this-firefox` → **Load Temporary Add-on…** → select `manifest.json`.
+
+Permanent: Firefox only installs signed add-ons. Sign it as *unlisted* on [addons.mozilla.org](https://addons.mozilla.org/developers/) (or `npx web-ext sign --channel unlisted`) and share the resulting `.xpi`.
 
 ## Privacy
 

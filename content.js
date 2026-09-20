@@ -154,13 +154,16 @@
   const card = (title, body, note = '') => `<section class="card"><h3>${esc(title)}${note ? `<span>${note}</span>` : ''}</h3>${body}</section>`;
 
   // ---------- views ----------
-  function periodBar() {
+  function periodBar(firstMonth) {
     const thisMonth = todayStr().slice(0, 7), p = state.period;
     const btn = (value, label) => `<button data-period="${value}" class="${p === value ? 'on' : ''}">${label}</button>`;
     const month = p.length === 7 ? p : thisMonth;
+    // a <select>, because Firefox has no <input type="month">
+    let options = p.length === 7 ? '' : '<option selected disabled>Pick month…</option>';
+    for (let m = thisMonth; m >= firstMonth; m = shiftMonth(m, -1)) options += `<option value="${m}" ${m === p ? 'selected' : ''}>${MONTHS[+m.slice(5) - 1]} ${m.slice(0, 4)}</option>`;
     return `<div class="seg">
       ${btn(thisMonth, 'This month')}${btn(shiftMonth(thisMonth, -1), 'Last month')}
-      <span class="pick"><button data-period="${shiftMonth(month, -1)}" title="Previous month">‹</button><input type="month" value="${month}" max="${thisMonth}" class="${p.length === 7 ? 'on' : ''}"><button data-period="${shiftMonth(month, 1)}" title="Next month" ${month >= thisMonth ? 'disabled' : ''}>›</button></span>
+      <span class="pick"><button data-period="${shiftMonth(month, -1)}" title="Previous month" ${month <= firstMonth ? 'disabled' : ''}>‹</button><select class="${p.length === 7 ? 'on' : ''}">${options}</select><button data-period="${shiftMonth(month, 1)}" title="Next month" ${month >= thisMonth ? 'disabled' : ''}>›</button></span>
       ${btn(thisMonth.slice(0, 4), 'This year')}${btn(String(+thisMonth.slice(0, 4) - 1), 'Last year')}${btn('all', 'All')}
     </div>`;
   }
@@ -213,7 +216,7 @@
       ${card('Days present per month', barChart(months.map(([k, m]) => ({ label: monthLabel(k), value: m.days, title: `${monthLabel(k)}: ${m.days} days present` })), { maxLabels: 12 }))}` : '';
 
     return `
-      ${periodBar()}
+      ${periodBar(all[0].date.slice(0, 7))}
       <p class="meta">${esc(periodLabel)} · ${esc(longDate(from))} – ${esc(longDate(to))}</p>
       <div class="tiles">
         ${tile('Days present', inRange.length, `${noCheckout} without checkout`)}
@@ -283,11 +286,11 @@
     .status { margin-right: auto; color: var(--mut); font-size: 12px; }
     .body { padding: 16px; overflow: auto; }
     .body > h2 { font-size: 16px; margin: 20px 0 10px; }
-    button, input { font: inherit; color: var(--fg); }
-    .tabs button, .seg button, .seg input, .x { border: 1px solid var(--line); background: var(--bg); padding: 6px 12px; border-radius: 6px; cursor: pointer; }
+    button, select { font: inherit; color: var(--fg); }
+    .tabs button, .seg button, .seg select, .x { border: 1px solid var(--line); background: var(--bg); padding: 6px 12px; border-radius: 6px; cursor: pointer; }
     .tabs button.on, .seg button.on { background: var(--acc); border-color: var(--acc); color: #fff; }
-    .seg input.on { border-color: var(--acc); box-shadow: 0 0 0 1px var(--acc); }
-    .wrap.dark input { color-scheme: dark; }
+    .seg select.on { border-color: var(--acc); box-shadow: 0 0 0 1px var(--acc); }
+    .wrap.dark select { color-scheme: dark; }
     button:disabled { opacity: .4; cursor: default; }
     .seg { display: flex; gap: 6px; margin-bottom: 8px; flex-wrap: wrap; align-items: center; }
     .pick { display: inline-flex; gap: 2px; margin: 0 6px; }
@@ -428,7 +431,7 @@
     render();
   });
   root.addEventListener('change', (e) => {
-    if (e.target.type !== 'month' || !e.target.value) return;
+    if (e.target.tagName !== 'SELECT') return;
     state.period = e.target.value;
     render();
   });

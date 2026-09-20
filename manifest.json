@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "AuthLab Attendance Insights",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Graphs and details for your attendance and leaves on lounge.authlab.io/office.",
   "content_scripts": [
     {
@@ -14,5 +14,16 @@
       "run_at": "document_idle",
       "world": "MAIN"
     }
-  ]
+  ],
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "attendance-insights@masiur.authlab",
+      "strict_min_version": "128.0",
+      "data_collection_permissions": {
+        "required": [
+          "none"
+        ]
+      }
+    }
+  }
 }

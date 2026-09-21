@@ -2,6 +2,14 @@
 
 Chrome / Firefox extension that adds an **📊 Insights** panel to `lounge.authlab.io/office` — graphs and details for your own attendance and leaves, built from data the page's API already returns but doesn't display.
 
+## Screenshots
+
+*(demo data)*
+
+![Attendance view](screenshots/attendance.png)
+
+![Leaves view](screenshots/leaves.png)
+
 ## Features
 
 - **Calendar periods** — this month (1st → today), last month, any month, this/last year, all time
